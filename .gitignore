@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.env
+*.pkl
+!river_detective/model/risk_model.pkl
+!river_detective/data/cache/enriched.pkl
+river_detective/data/cache/river_detective.db
+river_detective/data/uploads/
+arcgis_csv_data/
+.DS_Store
+test.py
+screenshot_*
+*.log
+*.tmp
