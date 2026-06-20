@@ -215,10 +215,18 @@ def db_reset_report_model():
 # ---- Model (synthetic: pollution transport tracer for sensor detection) ----
 _model_dir = os.path.join(os.path.dirname(__file__), "..", "model")
 sys.path.insert(0, _model_dir)
-tracer = joblib.load(os.path.join(_model_dir, "source_tracer.pkl"))
-model = tracer["model"]
-transport = tracer["transport"]
-N_SENSORS = 10
+try:
+    tracer = joblib.load(os.path.join(_model_dir, "source_tracer.pkl"))
+    model = tracer["model"]
+    transport = tracer["transport"]
+    N_SENSORS = 10
+    _tracer_loaded = True
+except Exception:
+    model = None
+    transport = None
+    N_SENSORS = 0
+    _tracer_loaded = False
+    print("Warning: source_tracer.pkl not found — sensor detection unavailable")
 
 _risk_model = None
 _ALL_LU_TYPES = sorted([
@@ -824,6 +832,8 @@ def list_sensors():
 
 @api.post("/detect")
 def detect_pollution(readings: list[SensorReading]):
+    if not _tracer_loaded:
+        raise HTTPException(503, "Sensor detection model not available")
     if len(readings) < 3:
         raise HTTPException(400, "Need at least 3 sensor readings")
     analysis = analyze_sensor_data(readings)

@@ -1,4 +1,5 @@
 arcgis_csv_data/
+!arcgis_csv_data/AlamSekitar_Sungai_SUNGAI.csv
 .git/
 __pycache__/
 *.pyc
