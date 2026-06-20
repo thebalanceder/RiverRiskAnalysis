@@ -5,10 +5,10 @@ services:
     region: singapore
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: cd river_detective/backend && python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: python -m uvicorn river_detective.backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: GROQ_API_KEY
-        sync: false  # set manually in dashboard
+        sync: false
       - key: RD_CACHE_DIR
         value: /var/data/cache
       - key: RD_UPLOADS_DIR
