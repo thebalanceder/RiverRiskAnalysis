@@ -1,18 +1,24 @@
 [build]
-  functions = "netlify/functions"
   publish = "river_detective/frontend"
 
+# Proxy API calls to the Render backend
+# After deploying Render, replace YOUR_RENDER_URL with the actual URL
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "https://YOUR_RENDER_URL.onrender.com/api/:splat"
   status = 200
+  force = true
 
+# Serve uploads from Render backend
 [[redirects]]
   from = "/uploads/*"
-  to = "/.netlify/functions/api/uploads/:splat"
+  to = "https://YOUR_RENDER_URL.onrender.com/uploads/:splat"
   status = 200
+  force = true
 
+# SPA fallback — serve index.html for all other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+

@@ -12,3 +12,4 @@ test.py
 screenshot_*
 *.log
 *.tmp
+netlify/functions/

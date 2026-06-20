@@ -4,6 +4,7 @@ import numpy as np
 import joblib
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -307,6 +308,13 @@ BADGE_DEFS = {
 
 # ---- App ----
 app = FastAPI(title="River Detective (Full Data)", version="2.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 _frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend")
 
 

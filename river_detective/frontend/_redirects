@@ -1,0 +1,5 @@
+# After deploying Render, replace YOUR_RENDER_URL with the actual Render URL
+# (e.g., https://river-risk-analysis.onrender.com)
+/api/*  https://YOUR_RENDER_URL.onrender.com/api/:splat  200
+/uploads/*  https://YOUR_RENDER_URL.onrender.com/uploads/:splat  200
+/*  /index.html  200
