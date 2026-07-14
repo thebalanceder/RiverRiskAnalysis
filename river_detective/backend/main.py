@@ -3180,12 +3180,21 @@ app.include_router(api)
 app.mount("/uploads", StaticFiles(directory=_uploads_dir), name="uploads")
 
 
+def _frontend_file(path, media_type=None):
+    headers = {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    }
+    return FileResponse(path, media_type=media_type, headers=headers)
+
+
 @app.get("/")
 def serve_root():
     """Serve the SPA entry point."""
     idx = os.path.join(_frontend_dir, "index.html")
     if os.path.isfile(idx):
-        return FileResponse(idx, media_type="text/html")
+        return _frontend_file(idx, media_type="text/html")
     return {"error": "Frontend not built"}
 
 
@@ -3198,14 +3207,14 @@ def serve_frontend(path: str):
     if path == "logo.png":
         logo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "logo.png"))
         if os.path.isfile(logo_path):
-            return FileResponse(logo_path)
+            return _frontend_file(logo_path)
     fp = os.path.join(_frontend_dir, path)
     if os.path.isfile(fp):
-        return FileResponse(fp)
+        return _frontend_file(fp)
     # SPA fallback
     idx = os.path.join(_frontend_dir, "index.html")
     if os.path.isfile(idx):
-        return FileResponse(idx, media_type="text/html")
+        return _frontend_file(idx, media_type="text/html")
     raise HTTPException(404, "Not found")
 
 
