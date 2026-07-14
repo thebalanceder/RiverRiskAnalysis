@@ -7,27 +7,42 @@
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <!-- jsPDF + html2canvas for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- App CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <!-- ===== ALERT BANNER ===== -->
+  <div id="alert-banner" class="alert-banner" style="display:none">
+    <span class="alert-banner-icon">⚠</span>
+    <span id="alert-banner-text"></span>
+    <button class="alert-banner-close" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+
   <!-- ===== HEADER ===== -->
   <div class="app">
     <header class="header">
       <div class="header-left">
-        <span class="header-icon">⊞</span>
+        <img class="header-icon" src="logo.png" alt="River Detective logo">
         <div>
           <div class="header-title">River Detective</div>
           <div class="header-sub">MBIP · Data Bersepadu</div>
         </div>
       </div>
       <nav class="nav">
+        <a class="nav-link" data-page="mission">Pusat Misi</a>
         <a class="nav-link active" data-page="risiko">Peta Risiko</a>
+        <a class="nav-link" data-page="trend">Trend</a>
         <a class="nav-link" data-page="report">Laporan</a>
         <a class="nav-link" data-page="sahkan">Sahkan</a>
         <a class="nav-link" data-page="leaderboard">Papan</a>
         <a class="nav-link" data-page="data">Data</a>
+        <a class="nav-link" data-page="model">Model ML</a>
         <a class="nav-link" data-page="profile" style="display:none">Profil</a>
         <a class="nav-link" data-page="login" id="nav-login">Log Masuk</a>
         <span class="nav-link" id="nav-user" style="display:none;cursor:pointer;opacity:0.7"></span>
@@ -39,11 +54,14 @@
     <div class="mobile-overlay" id="mobile-overlay"></div>
     <nav class="mobile-nav" id="mobile-nav">
       <button class="close-btn" id="mobile-close">✕</button>
+      <a class="nav-link" data-page="mission">Pusat Misi</a>
       <a class="nav-link active" data-page="risiko">Peta Risiko</a>
+      <a class="nav-link" data-page="trend">Trend</a>
       <a class="nav-link" data-page="report">Laporan</a>
       <a class="nav-link" data-page="sahkan">Sahkan</a>
       <a class="nav-link" data-page="leaderboard">Papan Pemimpin</a>
       <a class="nav-link" data-page="data">Data Bersepadu</a>
+      <a class="nav-link" data-page="model">Model ML</a>
       <a class="nav-link" data-page="profile">Profil</a>
       <a class="nav-link" data-page="login">Log Masuk</a>
     </nav>
@@ -59,6 +77,22 @@
       <span>Sistem Pengesanan Pencemaran Sungai Bersepadu MBIP</span>
       <span>ArcGIS · IMELC · 11 Data Sources</span>
     </footer>
+  </div>
+
+  <!-- ===== CHATBOT ===== -->
+  <div id="chatbot-toggle" class="chatbot-toggle" onclick="toggleChatbot()">💬</div>
+  <div id="chatbot-box" class="chatbot-box" style="display:none">
+    <div class="chatbot-header">
+      <span>🤖 River Detective AI</span>
+      <button onclick="toggleChatbot()" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1rem">✕</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages">
+      <div class="chatbot-msg bot">Selamat datang! Tanya saya tentang hasil sistem, Peta Risiko, Trend, Model ML, Larian Permukaan, simulasi, laporan atau cara guna River Detective.</div>
+    </div>
+    <div class="chatbot-input-row">
+      <input id="chatbot-input" class="chatbot-input" placeholder="Taip mesej..." onkeydown="if(event.key==='Enter')sendChatbot()">
+      <button class="chatbot-send" onclick="sendChatbot()">→</button>
+    </div>
   </div>
 
   <!-- Leaflet JS -->
