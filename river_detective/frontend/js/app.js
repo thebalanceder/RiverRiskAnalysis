@@ -3751,21 +3751,7 @@ async function loadSegmentDetailEnhanced(segmentId) {
 
 
 // ===== Init =====
-document.addEventListener('DOMContentLoaded', async () => {
-  // Verify existing session
-  const tok = getAuthToken();
-  if (tok) {
-    try {
-      const me = await apiGet('/me');
-      _authUser = me.user_id;
-      _isAdmin = !!me.is_admin;
-      setUserId(me.user_id);
-    } catch {
-      setAuthToken('');
-      setUserId('');
-      _isAdmin = false;
-    }
-  }
+document.addEventListener('DOMContentLoaded', () => {
   updateNavAuth();
 
   // Connect WebSocket for real-time alerts
@@ -3781,4 +3767,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     el.addEventListener('click', () => { if (el.dataset.page) navigate(el.dataset.page); });
   });
   navigate(location.hash.replace('#', '') || 'risiko');
+
+  // Verify existing session in the background so Render cold starts do not block page navigation.
+  const tok = getAuthToken();
+  if (tok) {
+    apiGet('/me', true).then(me => {
+      _authUser = me.user_id;
+      _isAdmin = !!me.is_admin;
+      setUserId(me.user_id);
+      updateNavAuth();
+      if (currentPage === 'sahkan' && !_isAdmin) navigate('risiko');
+    }).catch(() => {
+      setAuthToken('');
+      setUserId('');
+      _authUser = '';
+      _isAdmin = false;
+      updateNavAuth();
+    });
+  }
 });
