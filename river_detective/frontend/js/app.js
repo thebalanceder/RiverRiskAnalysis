@@ -2470,22 +2470,6 @@ async function renderTrend(el) {
       </div>
     </div>
 
-    <div class="section-title">Trend Masa</div>
-    <div class="trend-charts-grid">
-      <div class="trend-chart-card" style="grid-column:1/-1">
-        <div class="trend-chart-title">Purata Skor Risiko Harian</div>
-        <div class="trend-chart-desc">Perubahan purata risiko keseluruhan mengikut hari</div>
-        <div class="trend-chart-box" style="height:260px"><canvas id="trend-daily-line"></canvas></div>
-      </div>
-    </div>
-    <div class="trend-charts-grid">
-      <div class="trend-chart-card" style="grid-column:1/-1">
-        <div class="trend-chart-title">Taburan Tahap Risiko Mengikut Masa</div>
-        <div class="trend-chart-desc">Perubahan bilangan segmen mengikut tahap risiko</div>
-        <div class="trend-chart-box" style="height:260px"><canvas id="trend-level-stacked"></canvas></div>
-      </div>
-    </div>
-
     <div id="trend-movers-wrap" style="display:none">
       <div class="section-title">Perubahan Signifikan</div>
       <div id="trend-movers" class="trend-movers-list"></div>
@@ -2565,51 +2549,6 @@ async function _loadTrendDashboard() {
           scales: { y: { beginAtZero: true, ticks: { font: { size: 10 } } }, x: { ticks: { font: { size: 9 } } } } },
       });
     }
-  }
-
-  const trend = rich.temporal_trend || [];
-  if (trend.length >= 2 && typeof Chart !== 'undefined') {
-    const ctxT = document.getElementById('trend-daily-line');
-    if (ctxT) {
-      if (_trendCharts.dailyLine) _trendCharts.dailyLine.destroy();
-      const hasML = trend.some(t => t.avg_ml != null);
-      const datasets = [
-        { label: 'Skor Gabungan', data: trend.map(t => t.avg_score), borderColor: '#1A1816', backgroundColor: 'rgba(26,24,22,0.08)', fill: true, tension: 0.3, pointRadius: 3, pointBackgroundColor: '#1A1816' },
-      ];
-      if (hasML) datasets.push({ label: 'Skor ML', data: trend.map(t => t.avg_ml), borderColor: '#2B6B5B', borderDash: [5, 3], fill: false, tension: 0.3, pointRadius: 2 });
-      _trendCharts.dailyLine = new Chart(ctxT, {
-        type: 'line',
-        data: { labels: trend.map(t => t.day.slice(5)), datasets },
-        options: { responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } }, tooltip: { callbacks: { afterBody: (items) => items[0] ? `${trend[items[0].dataIndex]?.segments || ''} segmen` : '' } } },
-          scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Skor', font: { size: 10 } } }, x: { ticks: { font: { size: 9 } } } } },
-      });
-    }
-  } else {
-    const ctxT = document.getElementById('trend-daily-line');
-    if (ctxT) { const w = ctxT.closest('.trend-chart-box'); if (w) w.innerHTML = '<div class="trend-empty-small">Perlu sekurang-kurangnya 2 snapshot untuk trend masa</div>'; }
-  }
-
-  const ltData = rich.level_trend || [];
-  if (ltData.length >= 2 && typeof Chart !== 'undefined') {
-    const ctxL = document.getElementById('trend-level-stacked');
-    if (ctxL) {
-      if (_trendCharts.levelStacked) _trendCharts.levelStacked.destroy();
-      const levels = ['KRITIKAL', 'TINGGI', 'SEDERHANA', 'RENDAH'];
-      _trendCharts.levelStacked = new Chart(ctxL, {
-        type: 'bar',
-        data: {
-          labels: ltData.map(d => d.day.slice(5)),
-          datasets: levels.map(l => ({ label: l, data: ltData.map(d => d[l] || 0), backgroundColor: _trendColor(l), borderRadius: 2 })),
-        },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } },
-          scales: { x: { stacked: true, ticks: { font: { size: 9 } } }, y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Bil. Segmen', font: { size: 10 } } } } },
-      });
-    }
-  } else {
-    const ctxL = document.getElementById('trend-level-stacked');
-    if (ctxL) { const w = ctxL.closest('.trend-chart-box'); if (w) w.innerHTML = '<div class="trend-empty-small">Perlu sekurang-kurangnya 2 snapshot untuk trend taburan</div>'; }
   }
 
   const movers = rich.top_movers || [];
