@@ -221,6 +221,21 @@ h4 { font-size: 1rem; }
   margin-bottom: 1.25rem;
 }
 
+/* ===== RIVER POLLUTION GUIDE ===== */
+.guide-header { display: flex; justify-content: space-between; align-items: end; }
+.river-guide { border: 1px solid var(--border); background: var(--bg-card); }
+.guide-tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: var(--bg-alt); }
+.guide-tab { appearance: none; border: 0; border-right: 1px solid var(--border); border-bottom: 1px solid transparent; background: transparent; color: var(--ink-dim); cursor: pointer; font: 600 0.68rem var(--font); padding: 0.65rem 0.8rem; }
+.guide-tab:hover, .guide-tab.active { background: var(--bg-card); color: var(--accent); }
+.guide-tab.active { box-shadow: inset 0 -2px var(--accent); }
+.guide-panel { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: 0.9rem; padding: 1.1rem; min-height: 170px; }
+.guide-index { color: var(--accent); font: 500 0.75rem var(--font-mono); padding-top: 0.2rem; }
+.guide-panel h2 { font-size: 1.15rem; margin-bottom: 0.45rem; }
+.guide-copy { color: var(--ink-dim); font-size: 0.88rem; max-width: 780px; }
+.guide-copy ul { margin: 0.1rem 0 0 1.1rem; }
+.guide-copy li { margin: 0.25rem 0; }
+.guide-note { border-top: 1px solid var(--border-light); color: var(--ink-muted); font-size: 0.72rem; margin-top: 0.65rem; padding-top: 0.55rem; }
+
 .section-title {
   font-weight: 600;
   font-size: 0.85rem;

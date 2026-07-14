@@ -371,8 +371,29 @@ function renderPage(page) {
     case 'profile': renderProfile(el); break;
     case 'login': renderLogin(el); break;
     case 'trend': renderTrend(el); break;
+    case 'panduan': renderPanduanSungai(el); break;
     default: renderRisiko(el);
   }
+}
+
+// ===== PANDUAN SUNGAI — compact public-facing reference =====
+function renderPanduanSungai(el) {
+  const tabs = [
+    { id: 'intro', label: 'Pengenalan', title: 'Sungai bersih, komuniti lebih selamat', body: 'Pencemaran sungai menjejaskan bekalan air, habitat, kesihatan awam dan daya tahan bandar. River Detective menyokong pengesanan awal supaya tindakan boleh diberi keutamaan.' },
+    { id: 'objektif', label: 'Objektif & tujuan', title: 'Daripada data kepada tindakan', body: 'Analisis ini mengenal pasti lokasi berisiko, menjejak kemungkinan punca dan menyokong keputusan pemeriksaan. Tujuannya ialah mencegah insiden, bukan sekadar merekodkannya.' },
+    { id: 'jenis', label: 'Jenis pencemaran', title: 'Apa yang boleh mencemarkan sungai?', body: '<ul><li><strong>Fizikal:</strong> sampah, sedimen dan kekeruhan.</li><li><strong>Kimia:</strong> minyak, logam, racun perosak dan bahan pencuci.</li><li><strong>Biologi:</strong> kumbahan, patogen dan nutrien berlebihan.</li></ul>' },
+    { id: 'faktor', label: 'Faktor risiko', title: 'Faktor yang meningkatkan risiko', body: '<ul><li>Pelepasan tidak terkawal dari premis dan kerja pembinaan.</li><li>Larian permukaan ketika hujan serta sistem saliran terbeban.</li><li>Guna tanah, kepadatan penduduk dan aktiviti di hulu sungai.</li></ul>' },
+    { id: 'bioproses', label: 'Pakar bioproses', title: 'Perspektif kejuruteraan bioproses', body: 'Pakar bioproses menilai beban organik, nutrien, pH, oksigen terlarut dan mikroorganisma. Mereka boleh mencadangkan rawatan seperti proses biologi aerobik/anaerobik, biofilter dan pemulihan berasaskan mikroba—disahkan melalui pensampelan makmal dan pemantauan proses.' },
+    { id: 'mbip', label: 'Usaha MBIP', title: 'Keutamaan pengurusan pencemaran MBIP', body: '<ul><li><strong>Kawal punca:</strong> pemeriksaan premis, saliran dan pelepasan mencurigakan.</li><li><strong>Pantau & respons:</strong> guna peta risiko, aduan komuniti dan pensampelan pantas.</li><li><strong>Pulih & cegah:</strong> pembersihan, pendidikan awam dan tindakan bersama agensi berkaitan.</li></ul><p class="guide-note">Cadangan ini menyokong perancangan dan perlu diselaras dengan prosedur serta pihak berkuasa yang berkenaan.</p>' }
+  ];
+  el.innerHTML = `<section class="page-header guide-header"><div><div class="eyebrow">RUJUKAN RINGKAS · MBIP</div><h1>Panduan Pencemaran Sungai</h1><p class="page-sub">Asas analisis, risiko dan pilihan tindakan dalam satu paparan.</p></div></section><section class="river-guide"><div class="guide-tabs" role="tablist">${tabs.map((tab, i) => `<button class="guide-tab${i === 0 ? ' active' : ''}" data-guide-tab="${tab.id}" role="tab" aria-selected="${i === 0}">${tab.label}</button>`).join('')}</div><article class="guide-panel" id="guide-panel" role="tabpanel"></article></section>`;
+  const panel = document.getElementById('guide-panel');
+  const showTab = (tab) => {
+    panel.innerHTML = `<div class="guide-index">${String(tabs.indexOf(tab) + 1).padStart(2, '0')}</div><div><h2>${tab.title}</h2><div class="guide-copy">${tab.body}</div></div>`;
+    document.querySelectorAll('.guide-tab').forEach(btn => { const active = btn.dataset.guideTab === tab.id; btn.classList.toggle('active', active); btn.setAttribute('aria-selected', active); });
+  };
+  document.querySelectorAll('.guide-tab').forEach(btn => btn.onclick = () => showTab(tabs.find(tab => tab.id === btn.dataset.guideTab)));
+  showTab(tabs[0]);
 }
 
 // ============================================================
