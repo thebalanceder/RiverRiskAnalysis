@@ -6,7 +6,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse
+from fastapi.responses import FileResponse, RedirectResponse, StreamingResponse, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
 from pydantic import BaseModel
@@ -3196,6 +3196,16 @@ def serve_root():
     if os.path.isfile(idx):
         return _frontend_file(idx, media_type="text/html")
     return {"error": "Frontend not built"}
+
+
+@app.head("/")
+def serve_root_head():
+    """Render health checks use HEAD /. Return OK without loading the SPA body."""
+    return Response(status_code=200, headers={
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    })
 
 
 @app.get("/{path:path}")
