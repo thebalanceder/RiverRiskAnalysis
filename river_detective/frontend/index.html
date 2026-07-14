@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>River Detective — Peta Risiko Sungai MBIP</title>
+  <script>
+    (function () {
+      var build = '7';
+      var key = 'river_detective_build_seen';
+      try {
+        if (localStorage.getItem(key) !== build) {
+          localStorage.setItem(key, build);
+          var url = new URL(window.location.href);
+          url.searchParams.set('rdv', build);
+          window.location.replace(url.toString());
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -13,7 +27,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- App CSS -->
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -98,6 +112,6 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- App JS -->
-  <script src="js/app.js?v=6"></script>
+  <script src="js/app.js?v=7"></script>
 </body>
 </html>
