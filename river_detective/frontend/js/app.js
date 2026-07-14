@@ -2419,7 +2419,7 @@ async function sendChatbot() {
   try {
     const res = await Promise.race([
       apiPost('/chatbot', { message: msg }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Masa tamat — server tidak membalas')), 15000)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Analisis AI mengambil masa terlalu lama. Sila cuba semula atau tanya soalan yang lebih spesifik.')), 45000)),
     ]);
     typingDiv.textContent = res.reply;
     if (res.data && res.data.critical_segments) {
